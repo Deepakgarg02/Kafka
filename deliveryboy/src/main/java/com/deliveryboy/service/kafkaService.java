@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.stream.Stream;
+
 @Service
 public class kafkaService {
 
@@ -17,11 +19,10 @@ public class kafkaService {
 
     public boolean updateLocation(String location){
 
-         this.KafkaTemplate
-                 .send(AppConstants.LOCATION_TOPIC_NAME, location);
+        Stream.of(location, "--------").forEach(msg -> this.KafkaTemplate.send(AppConstants.LOCATION_TOPIC_NAME, msg));
 
-         logger.info("message produced");
-         return true;
+        logger.info("message produced");
+        return true;
 
     }
 }
